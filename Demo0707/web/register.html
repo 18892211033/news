@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录页面register</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
+        var form = document.getElementsByTagName('form')[0];
+        function validateForm() {
+            var ins = document.getElementsByTagName('input');
+            var patt = /^\w{6,12}$/ ;
+            if (!patt.test(ins[1].value)){
+                alert("密码要求（6--12，数字和字母相结合）");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+<h3><a href="app/counter">5. application--计数器</a> </h3>
+<h3> <a href="request/othermethod">1. request--其他方法 </a> </h3>
+<h3><a href="response/method">2. response.sendRedirect  -- 重定向</a> </h3>
+<h3><a href="url/dispatcher">3. request.getRequestDispatcher().forward()--- 转发</a> </h3>
+<h3>用户注册页面</h3>
+<h2>密码要求（6--12，数字和字母相结合）</h2>
+<form method="get" action="user/register" name="first" onsubmit="return validateForm()">
+    <p>用户名<input type="text" name="name"/></p>
+    <p>密码<input type="password" name="password"/></p>
+    <p>移动电话<input type="text" name="phone"/></p>
+    <p>生日<input type="date" name="birthday"/></p>
+    <p><button type="submit">注册</button><p>
+</form>
+</body>
+</html>

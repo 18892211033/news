@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+					http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+					http://www.springframework.org/schema/mvc http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+    <!--先调用无参的构造函数new对象，然后调用属性的set方法赋值-->
+    <bean id="person" class="com.wst.bean.Person">
+        <property name="id" value="P001"/>
+        <property name="name" value="Rose"/>
+    </bean>
+    <bean id="person2" class="com.wst.bean.Person">
+        <property name="id" value="P002"/>
+        <property name="name" value="joker"/>
+    </bean>
+    <!--通过构造函数new对象-->
+    <bean id="person3" class="com.wst.bean.Person">
+        <constructor-arg index="0" value="p003"/><!--index参数位置    value赋值 -->
+        <constructor-arg index="1" value="tom"/>
+    </bean>
+    <!--ref初始化Person里的Car-->
+    <bean id="person4" class="com.wst.bean.Person">
+        <property name="id" value="P004"/>
+        <property name="name" value="wst"/>
+        <property name="car" ref="car"/>
+    </bean>
+    <bean id="car" class="com.wst.bean.Car">
+        <property name="name" value="大众"/>
+        <property name="price" value="20.5"/>
+    </bean>
+    <bean id="car2" class="com.wst.bean.Car">
+        <property name="name" value="奔驰"/>
+        <property name="price" value="50.5"/>
+    </bean>
+    <!--类中含有List类型成员-->
+    <bean id="person5" class="com.wst.bean.PersonCars">
+        <property name="id" value="P005"/>
+        <property name="name" value="lqr"/>
+        <property name="list">
+            <list>
+                <ref bean="car"/>
+                <ref bean="car2"/>
+                <bean class="com.wst.bean.Car">
+                    <property name="name" value="捷达"/>
+                    <property name="price" value="8.8"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <bean id="personMap1" class="com.wst.bean.PersonMap">
+        <property name="id" value="map001"/>
+        <property name="name" value="张三"/>
+        <property name="mapCar">
+            <map>
+                <entry key="lower" value-ref="car"/>
+                <entry key="higher" value-ref="car2"/>
+            </map>
+        </property>
+    </bean>
+
+    <!--scope作用域测试-->
+    <bean id="scope1" class="com.wst.bean.ScopeC">
+        <property name="n" value="1"></property>
+    </bean>
+    <bean id="scope2" class="com.wst.bean.ScopeC" scope="prototype">
+        <property name="info" value="scope作用域"></property>
+    </bean>
+    <!--bean 的初始化和销毁-->
+    <bean id="life" class="com.wst.bean.LifeC" init-method="init" destroy-method="destroy">
+        <property name="n" value="9"/>
+        <property name="str" value="init----life---destroy"/>
+    </bean>
+</beans>

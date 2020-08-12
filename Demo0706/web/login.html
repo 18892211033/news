@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
+        $(function (){
+            $("#btnLogin").click(function () {
+                $.post(
+                    'user/login',//网址url，加/是找根路径，没有/相对路径 ;一般都不加/
+                    $("#formLogin").serialize(),//只会将”成功的控件“序列化为字符串。如果不使用按钮来提交表单，则不对提交按钮的值序列化。如果要表单元素的值包含到序列字符串中，元素必须使用 name 属性。
+                    function (reqData) {   //回调函数，参数reqData就是服务器回传数据
+                        console.log(reqData);//js对象
+                    }
+                );
+            });
+        })
+    </script>
+</head>
+<body>
+    <form id="formLogin">
+        <p>用户名<input type="text" name="loginname" /></p>
+        <p>密码<input type="password" name="loginpass"></p>
+        <p><button type="button" id="btnLogin">登录</button></p>
+    </form>
+</body>
+</html>

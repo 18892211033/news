@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="assets/js/personal.js"></script>
+</head>
+<img src="assets/img/123.jpg" height="100px" width="100px" id="showPhoto"/>
+<form id="remake" method="post" enctype="multipart/form-data" >
+    <p>id<input type="text" id="reid" name="reid" disabled></p>
+    <p>账号<input type="text" id="rename" name="rename" disabled></p>
+    <p>密码<input type="text" id="repass" name="repass"></p>
+    <p>电话<input type="text" id="remobile" name="remobile"></p>
+    <p>生日<input type="text" id="rebirthday" name="rebirthday" disabled></p>
+    <button type="button" id="btnremake">修改</button>
+</form>
+
+<form id="Up" method="post" enctype="multipart/form-data">
+    <p>
+        <input type="file" name="userphoto"/>
+        <button type="button" id="btnUp">更换头像</button></p>
+    </p>
+</form>
+<button type="button"><a href="sucess.html">返回主页</a></button>
+</body>
+</html>

@@ -1,0 +1,608 @@
+## 学习目标
+
+1. 搭建一个JavaWeb应用程序，发布
+2. 常用配置 — DB、Web配置
+3. SpringBoot整合 数据库+数据源
+4. SpringBoot环境下 MyBatis Plus的使用
+5. Spring配置 拦截器、过滤器、Servlet等
+6. Spring Boot 使用AOP实现用户操作监控
+7. 【自学】SpringBoot整合Swagger2构建 Rest API
+
+## 0807
+
+### 1. SpringBoot简介
+
+​	简化Spring配置，快速搭建应用程序。不是Spring的替代产品。
+
+​	SpringBoot使用时 ：内置了Servlet容器（不需要安装任何的服务器软件）；
+
+​						简化Maven的配置项；
+
+​						摆脱xml配置文件。	
+
+​			-- Java代码中通过注解+继承实现配置
+
+### 2. SpringBoot应用程序创建和测试运行
+
+### 3. 配置文件 
+
+​	1）配置实现 ：
+
+​			-- 配置文件配置
+
+​					application.properties文件
+
+​					application.yml文件
+
+​					两个文件同时存在，设置项产生冲突，以properties为最终配置。
+
+​	2）多profile文件形式
+
+​		application-{profile}.properties/yml
+
+​		profile : dev 开发环境 , test 测试环境 , prod 生产环境
+
+​		比如  application-test.properties
+
+​		多个配置文件时，激活方式 ：
+
+​			-- application.properties/yml
+
+​				spring.profiles.active=dev|test|prod
+
+​			-- 运行配置
+
+​				Run 菜单项==》Edit Configuration ==》Active Profiles ==》填入 dev|test|prod
+
+### 4. 注解 @ConfigurationProperties 与 @Value
+
+​	读取**配置文件**的值实现注入：
+
+​	@ConfigurationProperties   为类注入；松散绑定
+
+​        @PropertySource
+
+​	@Value 为属性注入；不支持松散绑定
+
+~~~java
+user.upload.photo=userphoto
+
+person.id=1
+person.name=张三
+person.birth=2000/12/10 09:23:23
+
+
+
+@Component
+@Scope("prototype")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ConfigurationProperties(prefix = "person")
+@PropertySource(value = "classpath:application.properties" , encoding = "utf-8")
+public class Person implements Serializable {
+    private Integer id ;
+    private String name ;
+    private Date birth ;
+}
+
+
+@Value("${user.upload.photo}")
+String userphotoPath ;
+~~~
+
+### 5. 热部署 DevTools
+
+​	1）介绍
+
+​	热部署就是正在运行状态的应用，修改了他的源码之后，在不重新启动的情况下能够自动把增量内容编译并部署到服务器上，使得修改立即生效。热部署为了解决的问题有两个， 一是在开发的时候，修改代码后不需要重启应用就能看到效果，大大提升开发效率；二是生产上运行的程序，可以在不停止运行的情况下进行升级，不影响用户使用。
+
+​	2）实现
+
+​		-- pom.xml 有 devtool的依赖
+
+​		-- idea 下修改两个位置
+
+​			Settings ： builder,Execution,Delopment ==》Compiler ==》勾选上“build project automatically”
+
+​			按下 ctrl+shift+alt+/ ==> 选择 Registry ==》勾选上“Compiler autoMake allow when app running”
+
+​		-- application中添加相关配置项
+
+​				#devTools工具开启
+​					spring.devtools.livereload.enabled=true
+​					spring.devtools.restart.enabled=true
+
+### 6. 日志
+
+​	-- 打印SQL语句的实现
+
+​		logging.level.dao层包=debug
+
+​	-- 日志系统
+
+​		1）日志级别 TRACE < DEBUG <INFO <WARN <ERROR < FATAL
+
+​		2）相关配置项
+
+~~~
+## 日志配置
+logging.level.root=info     # 项目所有日志级别设置 
+logging.level.com.isoft.demo.dao=debug	# 某个package日志级别设置
+logging.file.path=./log		# 设置日志文件保存路径，  ./表示从项目根目录出发
+logging.file.name=logging.log	# 设置日志文件名字   默认名字 spring.log
+【path 与 name 不能同时生效，如果同时设置，只有文件名设置生效；path失去作用
+	如果没有设置path，文件在项目根目录下
+】
+~~~
+
+​		3）添加日志信息 ：
+
+​			-创建日志对象常量
+
+​			static final Logger LOG = LoggerFactory.getLogger(当前类名.class) ;  // org.slfrj
+
+​			-添加日志信息
+
+​			LOG.xx("日志内容")；   // xx表示日志级别方法名
+
+​		4）Spring-boot-starter-logging  采用的是 slf4j+logback的形式处理日志
+
+​			无论使用什么框架进行日志处理，最终都替换为 slf4j（日志门面）
+
+## 0810
+
+### 1. Thymeleaf模板引擎
+
+​	渲染Controller层提供的Model数据。
+
+​       1）介绍
+
+​	Thymeleaf是一款用于渲染XML/XHTML/HTML5内容的模板引擎。类似JSP，Velocity，FreeMaker等，它也可以轻易的与Spring MVC等Web框架进行集成作为Web应用的模板引擎。与其它模板引擎相比，Thymeleaf最大的特点是能够直接在浏览器中打开并正确显示模板页面，而不需要启动整个Web应用。
+
+​       Spring Boot推荐使用Thymeleaf、Freemarker等后现代的模板引擎技术；一旦导入相关依赖，会自动配置ThymeleafAutoConfiguration、FreeMarkerAutoConfiguration。
+
+​              2）使用
+
+​              -- 依赖项
+
+~~~xml
+ <dependency>
+
+           <groupId>org.springframework.boot</groupId>
+
+           <artifactId>spring-boot-starter-thymeleaf</artifactId>
+
+  </dependency>
+~~~
+
+​		 -- 模板页面放置位置
+
+​              		/resources/templates/*.html
+
+​		-- 模板页添加命名空间声明
+
+```html
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+```
+
+​              -- 模板页面主要标签
+
+​                     th:text  渲染标签之间的文本
+
+​                     th:src="@{}"      th:href="@{}"   加载路径
+
+​                     th:each="循环变量 : ${集合或者数组}"
+
+​                     \------
+
+​                     加载变量 ${变量名}
+
+​                     普通字符串和model数据相结合 => '普通字符串' + ${变量名}
+
+​                     1）对象数据加载示例 ：
+
+~~~html
+<p th:text="${person?.name}">   person对象为null，则name属性不再渲染
+~~~
+
+​		 非空判定
+
+​		-- 集合
+
+~~~html
+<div th:if="${not#lists.isEmpty(list)}">
+~~~
+
+​                 -- String
+
+~~~html
+<div th:if="${not #strings.isEmpty(info)}">
+	<h3 th:text="${info}"></h3>
+</div>
+~~~
+
+示例参考 test.html
+
+~~~html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h3>模板ThymeLeaf测试</h3>
+    <div th:if="${not #strings.isEmpty(info)}">
+        <p>加载普通String -- info : <span th:text="${info}"></span></p>
+    </div>
+    <p>加载对象Person --
+        <ul>
+        <li>id : <span th:text="${person?.id}"></span></li>
+        <li>name : <span th:text="${person?.name}"></span></li>
+        <li>birth : <span th:text="${person?.birth}"></span></li>
+        </ul>
+    </p>
+    <div th:if="${not #lists.isEmpty(list)}">
+        <p>加载集合List
+            <ul th:each="item : ${list}">
+                <li><span th:text="${item.id}"></span> -
+                    <span th:text="${item.name}"></span> -
+                    <span th:text="${item.birth}"></span>
+                </li>
+            </ul>
+        </p>
+    </div>
+    <p>加载model中用于描述路径的变量</p>
+        <img th:src="@{${imgFull}}" /><br/>
+        <img th:src="@{'assets/imgs/'+${imgName}}" /> ?????
+
+</body>
+</html>
+~~~
+
+
+
+### 2. Web的自动配置
+
+​	SpringBoot中Web相关配置在org.springframework.boot.autoconfigure.web.servlet包下的WebMvcAutoConfiguration类和WebMvcProperties类中。
+
+​       1）Spring Web MVC 的视图解析器
+
+​		spring.mvc.view.prefix= /
+​		spring.mvc.view.suffix= .html
+
+​	2）Servlet内置容器配置
+
+​      		 server.port=8080
+
+​       		server.servlet.context-path=/?  # 以 "/"开头，不能以"/"结尾
+
+​			如 ：server.servlet.context-path=/springboot
+
+​       		server.servlet.session.timeout=   #默认时30m，自定义以秒为单位
+
+​       3）静态资源的自动映射
+
+​                     /static/
+
+​                     /templates/
+
+​       4）编码设置
+
+​               spring.http.encoding.charset=UTF-8
+​		spring.http.encoding.enabled=true
+​		spring.http.encoding.force=true
+​		spring.messages.encoding=UTF-8
+
+​       5）为 @Configuration与@Bean   创建配置类对象
+
+​       6）首页的默认映射
+
+​              /static/index.html
+
+​       7）favicon.ico图标的自动使用【SpringBoot2.+不起作用】
+
+### 3.  Servlet组件——Filter、Servlet、Listener配置
+
+​	启动类中，加入注解@ServletComponentScan，它用于扫描Servlet组件，包括使用@WebServlet、@WebFilter和@WebListener进行修饰的类。
+
+### 4.自定义Web中配置
+
+​	可选择如下方式任一种：
+
+​	①。如果SpringBoot提供的SpringMVC默认配置不符合需求的时候，
+
+​       则可以通过一个配置类（注解有@Configuration）加上@EnableWebMvc注解来实现完全自己控制的MVC配置。
+
+​       【完全自定义配置，不使用SpringBoot的默认配置】
+
+​       ②。如果既想保留SpringBoot的配置，又想增加额外的自定义配置：
+
+​       则可以定义一个配置类（注解有@Configuration）并继承WebMvcConfigurer(2.x)【WebMvcConfigurerAdapter(1.x)】
+
+​       无须使用@EnableWebMvc注解，按照SpringMVC添加配置的方法来添加其它配置。
+
+​       ③。application.* 配置
+
+​       ④。在配置类（注解有@Configuration）中添加方法，方法中添加配置，并且该方法返回bean【@Bean】
+
+### 5. Spring Web MVC 拦截器配置
+
+​	【SpringBoot2.+  server.servlet.path=? 设DispacherServlet的url-patter不建议使用】
+
+​	-- 定义拦截器类，并添加@Component注解
+
+​		   @Component
+
+​                     public class XxxInterceptor extends HandlerInterceptorAdapter {
+
+​				// ...
+
+​                     }
+
+​	-- 拦截器配置
+
+​		①。定义类 implements WebMvcConfigurer , 并添加 @Configuration
+
+​		②。重写方法
+
+​			public void addInterceptors(InterceptorRegistry registry) {
+
+​					registry.addInterceptor(拦截器对象)
+
+​							.addPathPatterns()
+
+​							.excludePathPatterns() ;
+
+​					...
+
+​			}
+
+​	如：添加静态资源放行拦截器
+
+~~~java
+/**
+ * 该拦截器目标是对静态资源请求放行——交给web容器来处理
+ */
+@Component
+public class StaticInterceptor extends HandlerInterceptorAdapter {
+}
+~~~
+
+~~~java
+@Configuration
+public class MyWebConfigure implements WebMvcConfigurer {
+
+    @Autowired
+    StaticInterceptor staticInterceptor ;
+    static final List<String> EXCLUDE_PATH = Arrays.asList("/" , "/index.html" , "/assets/css/**" , "/assets/js/**" , "/assets/imgs/**" , "/error/**") ;
+
+   
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(staticInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(EXCLUDE_PATH) ;
+
+        //registry.addInterceptor(testInterceptor)
+        //        .addPathPatterns("/test/**");
+
+    }
+}
+~~~
+
+
+
+### 6. 文件上传与下载
+
+​	1）上传--同SpringMVC
+
+​		不同之处——上传路径在application中设置，然后在Controller使用@Value获取值
+
+​		不需要引入 commons-io , commons-fileupload 依赖
+
+​		application.*中配置文件上传相关设置（可不加）
+
+​			spring.servlet.multipart.max-file-size=10MB
+​			spring.servlet.multipart.max-request-size=1024MB	
+
+​	2）文件下载
+
+​		问题：SpringBoot测试使用内置Tomcat，下载时找不到下载资源
+​		和SpringMVC中不同之处 ：获取所要下载的文件的输入流不同	
+
+​		【测试：将项目发布，然后放到外部的Tomcat下进行测试】
+
+### 7. 项目发布（参考txt文件）
+
+~~~
+Idea下Maven的Springboot项目打包发布
+1. pom.xml
+	添加 <packaging>war</packaging>
+2. test/
+	入口测试文件java类，去掉@注解，或者删除该类
+3. Springboot的入口类
+	-- 添加  extends SpringBootServletInitializer 
+
+	-- 添加方法
+			@Override
+			protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+				return builder.sources(当前类名.class);
+			}
+	-- 该类必须有如下两个注解符号
+	@Configuration
+	@SpringBootApplication
+	
+	-- 该类包含有main函数
+	 public static void main(String[] args) {
+        SpringApplication.run(当前类名.class, args);
+    }
+4. 打开idea的Terminal，输入如下命令
+	mvn clean package
+~~~
+
+
+
+## 0811
+
+### 1. 发送邮件应用
+
+​       发送激活邮件 ：注册（电子邮箱）==》注册成功，激活邮件
+
+​       逻辑处理：
+
+​              注册： 电子邮件
+
+​              ==》成功 ==》数据库 insert ： id、email、activeCode、status（未激活）
+
+​                                   发送电子邮件：超链接  网站网址\请求url\activeCode=?&id=&
+
+​              注册用户打开邮件，点击激活链接 ==》
+
+​                            网站发送了请求，携带了激活码和用户id ==》校验用户id+激活码的用户是否存在，而且是否是未激活状态
+
+​                                                                                                  ==》校验通过 ==》数据库 update   修改status（激活）
+
+### 2. Spring框架中用于Java邮件支持的接口和类组织如下： 
+
+​              -- MailSender interface：发送简单基础电子邮件的顶级接口；
+
+​              --JavaMailSender interface：
+
+​              是MailSender的子接口。它支持MIME消息，并且主要与MimeMessageHelper类一起用于创建MimeMessage。建议在此接口实现类JavaMailSenderImpl中使用MimeMessagePreparator机制；
+
+​              -- JavaMailSenderImpl class：实现了JavaMailSender 的接口，它支持MimeMessage和SimpleMailMessage；
+
+​              -- MimeMessagePreparator interface：提供一个回调接口，用于编写MIME消息；
+
+​                            
+
+​              -- SimpleMailMessage class：用于创建简单的邮件消息，包括from，to，cc，subject和text字段；
+
+​              -- MimeMessageHelper class：用于创建MIME消息的帮助类。可以创建HTML格式邮件、带有附件邮件。
+
+~~~java
+	发送邮件 ： send()
+			MainSender    发送邮件
+				- JavaMailSender
+					- JavaMailsenderImpl  类  =》发送普通邮件、Mime消息邮件
+			
+	封装邮件相关信息 ：
+			SimpleMailMessage		==》简单邮件消息
+			MimeMessageHelper、MimeMessagePreparator   ==》用来实现创建MIME消息
+				MimeMessagePreparator mimeMessagePreparator = mimeMessage -> {
+					MimeMessageHelper helper = new MimeMessageHelper(mimeMessage) ;
+					helper.setFrom() ;
+					helper.setSubject();
+					helper.setTo();
+					helper.setText();
+				}
+~~~
+
+
+
+​              **依赖项**
+
+```html
+     <dependency>
+			<groupId>org.springframework.boot</groupId>  
+			<artifactId>spring-boot-starter-mail</artifactId>
+	</dependency>
+
+```
+
+
+
+### 3. 配置邮件发送方
+
+​       -- 发送方电子邮件中设置
+
+​              设置 ==》授权第三方邮件客户端账号 ==》设置之后账号只能第三方客户端使用，并不能真正登录你的邮件
+
+​       -- application.properties
+
+​              \#账号和密码是真正邮件中设置的授权给第三方邮件客户端使用的账              
+
+```html
+spring.mail.host=xxx
+spring.mail.username=你的邮箱账号
+spring.mail.password=xxx
+```
+
+\#其他属性配置              
+
+```html
+spring.mail.properties.mail.smtp.auth=true  
+spring.mail.properties.mail.smtp.starttls.enable=true  
+spring.mail.properties.mail.smtp.starttls.required=true
+```
+
+​       \#发送激活邮件时，激活链接服务器IP与端口号
+
+​              com.email.ip=10.96.116.75
+
+​              com.email.port=8088
+
+### 4. 实现
+
+​	封装邮件相关信息类 ==》发送邮件工具类 ==》Controller中发送邮件测试
+
+​	【注】发送带有附件邮件 ==》项目发布后，将项目war放到web容器下进行测试
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

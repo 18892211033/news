@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        <!--<li><a href="test">测试controller</a></li>-->
+        <li><a href="test0723/viewname">viewname</a></li>
+        <li><a href="test0723/mav">mav</a></li>
+        <li><a href="test0723/Json">Json Map</a></li>
+    </ul>
+<hr/>
+    <ul>
+        <li><a href="param/param1?girlfriend=李其茹&money=0">param1</a></li>
+        <li><a href="param/param2?girl=李其茹&qian=0">param2(字段不匹配)</a></li>
+        <li><a href="param/param3?id=1&name=王思桐&password=123123&regDatetime=2020-02-02 02:02:02&status=1">param3(给对象传参作为属性)</a></li>
+        <li><a href="param/param4?flag=true&dt=2020-02-02 02:02:02">param4(布尔值和时间)</a></li>
+    </ul>
+<hr/>
+    <h3>表单提交</h3>
+    <form method="post" action="param/paramFrom">
+        <p><input type="text" placeholder="账号" name="regname"></p>
+        <p>爱好
+            <input type="checkbox" name="hobby" value="C"/>C语言
+            <input type="checkbox" name="hobby" value="C++"/>C++语言
+            <input type="checkbox" name="hobby" value="C#"/>C#语言
+            <input type="checkbox" name="hobby" value="java"/>java语言
+            <input type="checkbox" name="hobby" value=".net"/>.net
+        </p>
+        <p>留言 <textarea name="notes">有事儿宁说话。。。</textarea> </p>
+        <p>
+            <button type="submit">提交</button>
+        </p>
+        <li><a href="file/download?fname=123.png">文件下载</a></li>
+    </form>
+
+    <h3>文件上传</h3>
+    <form method="post" action="file/upload" enctype="multipart/form-data">
+        <input type="hidden" name="uid" value="1">
+        头像选择<input type="file" name="userphoto" />
+        <button type="submit">上传</button>
+    </form>
+</body>
+</html>

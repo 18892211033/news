@@ -1,0 +1,14 @@
+#main{
+    width: 1000px;
+    margin: 0 auto;
+    font-size: 14px;
+    background-color: chartreuse;
+    padding: 0px;
+}
+body ,ul ,ol ,li {
+    margin: 0px;
+    padding: 0px;
+}
+.clear{
+    clear: both;
+}

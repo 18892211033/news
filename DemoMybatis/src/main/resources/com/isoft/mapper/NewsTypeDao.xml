@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoft.dao.NewsTypeDao">
+<!--NewsType getById(Integer typeId);-->
+<select id="getById" resultMap="com.isoft.mapper.resultmapper.NewsTypeMap">
+    select tb_type.id as tid,tb_type.typename,tb_news.*
+    from tb_type inner join tb_news on tb_type.id=tb_news.typeid
+    where tb_type.id=#{typeId}
+</select>
+<!--    NewsType getById3(Integer typeId);-->
+    <select id="getById3" resultMap="com.isoft.mapper.resultmapper.NewsTypeMap2">
+        select id as tid ,typename from tb_type where id=#{typeId}
+    </select>
+</mapper>

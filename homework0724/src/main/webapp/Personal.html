@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <script type='text/javascript' src="js/jquery-3.1.1.min.js"></script>
+    <script type='text/javascript' src="assets/js/personal.js"></script>
+</head>
+<h3>个人中心</h3>
+<img src="assets/img/123.jpg" height="100px" width="100px" id="showPhoto"/>
+<form id="remake" method="post">
+    <p><input type="hidden" id="id" name="id" ></p>
+    <p>账号<input type="text" id="name" name="name" disabled></p>
+    <p>密码<input type="text" id="password" name="password"></p>
+    <p>注册时间<input type="text" id="regDatetime" name="regDatetime" disabled></p>
+    <p><input type="hidden" id="photoUrl" name="photoUrl" disabled></p>
+    <button type="button" id="btnremake">修改</button>
+</form>
+
+<form id="Up" method="post" enctype="multipart/form-data">
+    <p>
+        <input type="file" name="userphoto"/>
+        <button type="button" id="btnUp">更换头像</button></p>
+    </p>
+</form>
+<button type="button"><a href="Register.html">返回主页</a></button>
+</body>
+</html>

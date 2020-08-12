@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wst.dao.UserDao">
+    <!--    Users checkUser(Integer id , String password);  -->
+    <select id="checkUser" resultType="Users">
+        select * from tb_users where id=#{id} and password=#{password}
+    </select>
+    <!--    Users getUser(@Param("id") Integer id);-->
+    <select id="getUser" resultType="Users">
+        select tb_users.id,tb_users.name,tb_users.password,tb_users.regDatetime,tb_users.status from tb_users where id=#{id}
+    </select>
+    <!--        int updateUser(Users users);       parameterType="Users"-->
+    <update id="updateUser">
+        update tb_users
+        <set>
+            <if test="null !=status">
+                status=#{status},
+            </if>
+            <if test="null !=password">
+                password=#{password},
+            </if>
+            <if test="null !=photoUrl">
+                photoUrl=#{photoUrl},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <!--    List<Users> getUsers(@Param("name") String name , @Param("status") Integer status);-->
+    <select id="getUsers" resultType="Users">
+        select * from tb_users
+        <where>
+            <if test="null !=name">
+                and name=#{name}
+            </if>
+            <if test="null !=status">
+                and status=#{status}
+            </if>
+            <if test="null == name and null == status">
+                and status >= 0
+            </if>
+        </where>
+    </select>
+    <!--    int addUser (Users users);-->
+    <insert id="addUser" parameterType="Users">
+        insert into tb_users(name,password,regDatetime,status,photoUrl)values
+        (#{name},#{password},now(),#{status},#{photoUrl})
+    </insert>
+    <!--    Users getUserAll(@Param("id") Integer id);-->
+    <select id="getUserAll" resultMap="com.wst.mapper.resultmapper.UersMap">
+       select tb_users.*,tb_comment.userid , tb_comment.id as cid , tb_comment.newsid , tb_comment.content_text , tb_comment.addDatetime
+       from tb_users inner join tb_comment on tb_users.id=tb_comment.userid
+       where tb_users.id=#{id}
+    </select>
+</mapper>

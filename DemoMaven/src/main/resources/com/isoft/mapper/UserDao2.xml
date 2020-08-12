@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoft.dao.UserDao2">
+<!--    @Select("select * from tb_user where name=#{name}")
+    User nameExists(String name);//验证用户名是否存在-->
+    <select id="nameExists" resultType="com.isoft.entity.User">
+        select * from tb_user where name=#{name}
+    </select>
+<!--    @Select("select * from tb_user where name=#{name} and password=#{password}")
+    User getUser(String name,String password);//根据账号密码查询-->
+    <select id="getUser" resultType="com.isoft.entity.User">
+        select * from tb_user where name=#{name} and password=#{password}
+    </select>
+<!--    @Insert("insert into tb_user values(#{id},#{name},#{password},#{mobile},now())")
+    int add(User user);//新增-->
+    <insert id="add" parameterType="com.isoft.entity.User">
+        insert into tb_user values(null ,#{name},#{password},#{mobile},now())
+    </insert>
+<!--    @Update("update tb_user set password=#{password} where id=#{id}")
+    int updatePassword(int id ,String password);//byid修改密码   修改啥也不用加-->
+    <update id="updatePassword">
+        update tb_user set password=#{password} where id=#{id}
+    </update>
+
+    <select id="getAll" resultType="com.isoft.entity.User">
+        select * from tb_user
+    </select>
+</mapper>

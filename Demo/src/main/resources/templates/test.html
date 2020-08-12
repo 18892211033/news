@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+        <h3>模板测试</h3>
+        <div th:if="${not #strings.isEmpty(info)}">
+            <p>加载普通String info : <span th:text="${info}"></span></p>
+        </div>
+        <p>加载person对象
+            <ul>
+                <li>id : <span th:text="${person?.id}"></span> </li>
+                <li>name : <span th:text="${person?.name}"></span> </li>
+                <li>birth : <span th:text="${person?.birth}"></span> </li>
+            </ul>
+        </p>
+        <p>加载集合list
+            <ul th:each="item : ${list}">
+                <li><span th:text="${item.id}"></span></li>
+                <li><span th:text="${item.name}"></span></li>
+                <li><span th:text="${item.birth}"></span></li>
+            </ul>
+        </p>
+        <p>加载图片
+            <img th:src="@{${imgPath}}"/>
+            <img th:src="@{'assets/imgs/'+${imgName}}"/>
+        </p>
+
+</body>
+</html>

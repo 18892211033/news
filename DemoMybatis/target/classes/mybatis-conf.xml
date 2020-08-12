@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration	  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"	  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 添加数据库属性配置文件 -->
+    <properties resource="db.properties" />
+    <!-- 懒加载设置 -->
+    <settings>
+        <!-- 打开延迟加载的开关 -->
+        <setting name="lazyLoadingEnabled" value="true" />
+        <!-- 将积极加载改为消息加载即按需加载 -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <typeAliases>
+        <package name="com.isoft.entity"/>
+    </typeAliases>
+
+    <!-- 配置数据库连接 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">   <!-- UNPOOLED 只在每次请时打开和关闭一个连接；POOLED 缓存JDBC连接对象；JDNI 和Spring时使用 -->
+                <property name="driver" value="${mysql.driver}"/>
+                <property name="url" value="${mysql.url}"/>
+                <property name="username" value="${mysql.username}"/>
+                <property name="password" value="${mysql.userpass}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="com/isoft/mapper/ResultMappers.xml"/>
+        <mapper class="com.isoft.dao.User2Dao" />
+        <mapper resource="com/isoft/mapper/User2Dao.xml"/>
+        <mapper class="com.isoft.dao.NewsTypeDao"/>
+        <mapper resource="com/isoft/mapper/NewsTypeDao.xml"/>
+
+        <mapper class="com.isoft.dao.NewsDao" />
+        <mapper resource="com/isoft/mapper/NewsDao.xml"/>
+
+        <mapper class="com.isoft.dao.NewsDao0720" />
+        <mapper resource="com/isoft/mapper/NewsDao0720.xml"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,23 @@
+Idea下Maven的Springboot项目打包发布
+1. pom.xml
+	添加 <packaging>war</packaging>
+2. test/
+	入口测试文件java类，去掉@注解，或者删除该类
+3. Springboot的入口类
+	-- 添加  extends SpringBootServletInitializer 
+
+	-- 添加方法
+			@Override
+			protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+				return builder.sources(当前类名.class);
+			}
+	-- 该类必须有如下两个注解符号
+	@Configuration
+	@SpringBootApplication
+	
+	-- 该类包含有main函数
+	 public static void main(String[] args) {
+        SpringApplication.run(当前类名.class, args);
+    }
+4. 打开idea的Terminal，输入如下命令
+	mvn clean package

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoft.dao.NewsDao0720">
+<!--    List<News> getNews(@Param("typeId") Integer typeId,@Param("titleKey") String titleKey, @Param("dateStr") String dateStr);-->
+    <sql id="selectSql">
+        select tb_news.*
+        from tb_news
+    </sql>
+    <select id="getNews" resultType="News">
+        <include refid="selectSql"></include>
+        <where>
+            <if test="null !=typeid">
+                and typeid=#{typeid}
+            </if>
+            <if test="null !=dateStr">
+                and DATE_FORMAT(pubdatetime,'%Y-%m-%d')=#{dateStr}
+            </if>
+            <if test="null !=titleKey">
+                <bind name="titleK" value="'%'+titleKey+'%'"/>
+                and title like #{titleK}
+            </if>
+        </where>
+    </select>
+    <!--int updateById(News news);-->
+    <update id="updateById" parameterType="News">
+        update tb_news
+        <set>
+            <if test="null !=typeid">
+                typeid=#{typeid},
+            </if>
+            <if test="null !=title">
+                title=#{title},
+            </if>
+            <if test="null !=content">
+                content=#{content},
+            </if>
+            <if test="null !=comefrom">
+                comefrom=#{comefrom},
+            </if>
+            <if test="null !=pubdatetime">
+                pubdatetime=#{pubdatetime}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+<!--    int deleteByIds(List<Integer> ids);-->
+    <delete id="deleteByIds">
+        delete from tb_news
+        where id in
+        <foreach collection="list" item="nid" open="(" close=")" separator=",">
+            #{nid}
+        </foreach>
+    </delete>
+
+
+    <!--    List<News> getNews2(@Param("typeId") Integer typeId,@Param("titleKey") String titleKey, @Param("dateStr") String dateStr);-->
+    <select id="getNews2" resultType="News">
+        <include refid="selectSql"></include>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="null !=typeid">
+                and typeid=#{typeid}
+            </if>
+            <if test="null !=dateStr">
+                and DATE_FORMAT(pubdatetime,'%Y-%m-%d')=#{dateStr}
+            </if>
+            <if test="null !=titleKey">
+                <bind name="titleK" value="'%'+titleKey+'%'"/>
+                and title like #{titleK}
+            </if>
+        </trim>
+    </select>
+    <!--int updateById2(News news);-->
+    <update id="updateById2" parameterType="News">
+        update tb_news
+        <trim prefix="set" suffixOverrides=",">
+            <if test="null !=typeid">
+                typeid=#{typeid},
+            </if>
+            <if test="null !=title">
+                title=#{title},
+            </if>
+            <if test="null !=content">
+                content=#{content},
+            </if>
+            <if test="null !=comefrom">
+                comefrom=#{comefrom},
+            </if>
+            <if test="null !=pubdatetime">
+                pubdatetime=#{pubdatetime}
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+    <!--List<News> getNewsByOne(@Param("typeid") Integer typeid,@Param("titleKey") String titleKey, @Param("dateStr") String dateStr);-->
+    <select id="getNewsByOne" resultType="News">
+        <include refid="selectSql"></include>
+        <choose>
+            <when test="null != typeid">
+                where typeid=#{typeid}
+            </when>
+            <when test="null != titleKey">
+            <bind name="titleK" value="'%'+titleKey+'%'"/>
+                where title like #{titleK}
+            </when>
+            <when test="null != dateStr">
+                where DATE_FORMAT(pubdatetime,'%Y-%m-%d')=#{dateStr}
+            </when>
+        </choose>
+    </select>
+<!--    int insertMore(List<News> list);-->
+    <insert id="insertMore">
+        insert into tb_news values
+        <foreach collection="list" separator="," item="news">
+            (null , #{news.typeid} , #{news.title} , #{news.content} , now() , #{news.comefrom})
+        </foreach>
+    </insert>
+
+
+</mapper>

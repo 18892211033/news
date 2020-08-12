@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function () {
+            $("#btnListener").click(function () {
+                $.get(
+                    'counter',
+                    function (reqData) {
+                        console.log(reqData);
+                    }
+                );
+            });
+            $("#btnUp").click(function () {
+                var formData = new FormData($('#formUp')[0]);
+                $.ajax({
+                    type : 'post',
+                    url : 'file/upload',
+                    data : formData,
+                    contentType : false,
+                    processData : false,
+                    success : function (reqData) {
+                        console.log(reqData);
+                        reqData = JSON.parse(reqData);
+                        alert(reqData.msg);
+                        if (reqData.errCode == 0){
+                            $("#showPhoto").attr("src" , reqData.data);
+                            $("#showPhoto").css("display" , "block")
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<br>
+<ul>
+    <li><a href="json/test">1--JsonTest--json序列化</a></li>
+    <li><a href="session/save?loginuser=张三">2--session存入数据</a></li>
+    <li><a href="session/get">3--session获取数据</a></li>
+    <li><a href="exit">4--session销毁数据</a></li>
+    <li><a href="cookie/save?loginname=李四">4--session销毁数据(李四)</a></li>
+    <li><a href="life">ServletLife生命周期测试------get</a></li>
+    <li><button type="button" id="btnListener">监听器测试------总访问量和在线人数/button></li>
+</ul>
+<form method="post" action="life">
+    <button type="submit">ServletLife生命周期测试------post</button>
+</form>
+</br>
+<hr/>
+<img id="showPhoto" style="display: none;" />
+<form method="post" enctype="multipart/form-data" action="file/upload" id="formUp">
+    姓名<input type="text" name="username">
+    <p><input type="hidden" name="userid" value="18"/>
+        <input type="file" name="userphoto"/>
+    </p>
+    <p><button type="submit">Upload</button></p>
+    <p><button type="button" id="btnUp">普通按钮提交</button></p>
+</form>
+<hr/>
+</body>
+</html>

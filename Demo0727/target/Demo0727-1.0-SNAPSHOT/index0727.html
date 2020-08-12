@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script>
+        $(function(){
+            $("#btnExp").click(function(){
+                $.get(
+                    'exp/jsonr' ,
+                    function(reqData) {
+                        console.log(reqData) ;
+                    }
+                )
+            });
+            $("#btnExp2").click(function(){
+                $.get(
+                    'exp/castExp' ,
+                    function(reqData) {
+                        console.log(reqData) ;
+                    }
+                )
+            });
+        })
+    </script>
+</head>
+<body>
+<ul>
+    <li><a href="ljq/test1">拦截器测试-(ModelAndView)</a> </li>
+    <li><a href="ljq/test1">拦截器测试-(json)</a> </li>
+    <li>&nbsp;</li>
+    <li><a href="system/get/1">权限校验拦截器-被拦截，然后加载syspages/Login.html</a> </li>
+    <li><a href="system/login">权限校验拦截器-被放行</a> </li>
+    <li>&nbsp;</li>
+    <li><a href="re/test1">重定向与转发--加载welcome.html</a> </li>
+    <li><a href="re/test1?isRe=true">重定向与转发String--方法redirect:/test/name</a> </li>
+    <li><a href="re/test1?isRe=true&isHtml=true">重定向与转发String--方法redirect:/syspages/Login.html</a> </li>
+    <li>&nbsp;</li>
+    <li><a href="re/test2?isRe=true">重定向与转发ModelAndView--方法redirect:/test/name</a> </li>
+    <li><a href="re/test2?isRe=true&isHtml=true">重定向与转发ModelAndView--方法redirect:/syspages/Login.html</a> </li>
+    <li>&nbsp;</li>
+    <li><a href="re/test3">重定向与转发@ResponseBody--没有转发</a> </li>
+    <li><a href="re/test3?isRe=true">重定向与转发@ResponseBody--转发/test/name</a> </li>
+    <li>&nbsp;</li>
+    <li><a href="exp/defExp">异常处理-- error.html</a> </li>
+    <li><a href="exp/myExp">异常处理-- error/errorCustom.html</a> </li>
+    <li><a href="exp/upExp">异常处理-- error/errorFileOutOfMax.html</a> </li>
+    <li><button type="button" id="btnExp">Ajax请求返回json</button> </li>
+
+    <li>&nbsp;</li>
+    <li><a href="exp/castExp">异常处理方式二- 返回json</a> </li>
+    <li><a href="exp/defExp">异常处理方式二 -- error.html</a> </li>
+    <li><button type="button" id="btnExp2">Ajax请求返回json</button> </li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+					http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+					http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+    <context:component-scan base-package="com.wst"/>
+    <bean id="timerAspect" class="com.wst.aspect.TimerAspect"/>
+    <bean id="aroundAspect" class="com.wst.aspect.AroundAspect"/>
+    <!--aop配置-->
+    <aop:config>
+        <!--切点表达式-->
+        <!--<aop:pointcut id="sysGet" expression="execution(public String com.wst.controller.SysController.get(java.lang.String, java.lang.String))"/>-->
+        <aop:pointcut id="sysGet" expression="execution(* com.wst.controller.SysController.*(..))"/>
+        <!--切面类-->
+        <aop:aspect ref="timerAspect" order="1">
+            <!--通知-->
+            <aop:before method="before" pointcut-ref="sysGet"/>
+            <aop:after method="after" pointcut-ref="sysGet"/>
+            <aop:after-returning method="afterReturnint" pointcut-ref="sysGet" returning="returnObj"/>
+            <aop:after-throwing method="exception" pointcut-ref="sysGet" throwing="t"/>
+        </aop:aspect>
+
+        <!--切面类-->
+        <aop:aspect ref="aroundAspect" order="2">
+            <!--通知-->
+            <aop:around method="around" pointcut-ref="sysGet"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

@@ -1,0 +1,15 @@
+#showtype li{
+    list-style-type: none;
+    text-decoration: aqua;
+    text-align: center;
+    cursor: pointer;
+    float: left;
+    width: 100px;
+}
+#showtop li {
+    list-style-type: none;
+    text-align: center;
+    float: left;
+    width: 180px;
+    padding: 10px;
+}
